@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Опросный лист | ООО АКСТА</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="main.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-block">
+            <span class="logo">ооо<span class="logo-accent">АКСТА</span></span>
+            <span class="logo-desc">- оборудование<br>- инструмент<br>- технология</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="tools.html">Инструмент</a>
+            <a href="service.html">Сервис</a>
+            <a href="education.html">Обучение</a>
+            <a href="news.html">Новости</a>
+            <a href="cart.html">Корзина</a>
+            <a href="anketa.html">Анкета</a>
+            <button id="theme-toggle" aria-label="Переключить тему"></button>
+        </nav>
+    </header>
+    <main>
+        <section class="anketa-main">
+            <h1>Опросный лист</h1>
+            <form id="anketa-form" class="anketa-form">
+                <label for="company">Компания</label>
+                <input type="text" id="company" name="company" required>
+                <label for="contact">Контактное лицо</label>
+                <input type="text" id="contact" name="contact" required>
+                <label for="contact-method">Предпочтительный способ связи</label>
+                <input type="text" id="contact-method" name="contact-method">
+                <label for="q1">1. Запланирована ли у Вас закупка металлообрабатывающего оборудования на 2025 год? Если да, то есть ли техническое задание, чертежи, эскизы?</label>
+                <textarea id="q1" name="q1" rows="3"></textarea>
+                <label for="q2">2. Какой бренд металлорежущего инструмента Вы используете на производстве? Есть ли незакрытые вопросы, потребности?</label>
+                <textarea id="q2" name="q2" rows="3"></textarea>
+                <label for="q3">3. Есть ли у Вас список ходовых позиций инструмента, который мы могли бы расценить и предоставить тестовые позиции?</label>
+                <textarea id="q3" name="q3" rows="3"></textarea>
+                <label for="q4">4. Что для Вас является основным критерием при выборе поставщика?</label>
+                <textarea id="q4" name="q4" rows="3"></textarea>
+                <label for="q5">5. Интересует ли Вас сервисное обслуживание имеющегося оборудования, включая поставку запасных частей?</label>
+                <textarea id="q5" name="q5" rows="3"></textarea>
+                <label for="q6">6. Есть ли актуальные задачи по инжинирингу и тех. процессам?</label>
+                <textarea id="q6" name="q6" rows="3"></textarea>
+                <button type="submit" class="btn-main">Отправить анкету</button>
+            </form>
+            <div class="anketa-contact">
+                <p>По всем вопросам вы можете связаться с менеджером:<br>Яна<br>+7 963 135 48 37<br><a href="mailto:sale_aksta@stankirb.ru">sale_aksta@stankirb.ru</a></p>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <span>© ООО «АКСТА», 2024</span>
+        <span>Сделано с любовью и вниманием к деталям</span>
+    </footer>
+</body>
+</html> 
