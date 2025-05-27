@@ -248,67 +248,217 @@ main {
   padding-left: 20px;
 }
 
+/* Улучшенные стили для анкеты */
+.anketa-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
 .anketa-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 400px;
+  gap: 24px;
+  max-width: 100%;
   margin: 0 auto;
-}
-
-.anketa-form input, .anketa-form textarea {
-  padding: 10px;
+  background: var(--card-bg);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 1rem;
-  background: var(--gray);
-  color: var(--main-text);
-  resize: none;
-  transition: border-color 0.2s;
 }
 
-.anketa-form input:focus, .anketa-form textarea:focus {
+.anketa-form label {
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-bottom: 8px;
+  display: block;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.anketa-form input, 
+.anketa-form textarea {
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--main-bg);
+  color: var(--main-text);
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.anketa-form input:focus, 
+.anketa-form textarea:focus {
   outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(233,126,178,0.1);
+}
+
+.anketa-form input:hover, 
+.anketa-form textarea:hover {
   border-color: var(--accent);
 }
 
-/* Улучшенные placeholder'ы */
-.anketa-form input::placeholder, .anketa-form textarea::placeholder {
+.anketa-form input::placeholder, 
+.anketa-form textarea::placeholder {
   color: var(--main-text);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .anketa-form textarea {
-  min-height: 80px;
+  min-height: 100px;
+  line-height: 1.5;
 }
 
-.footer {
-  background: var(--footer-bg);
-  color: var(--main-text);
+.anketa-form button[type="submit"] {
+  margin-top: 16px;
+  align-self: center;
+  min-width: 200px;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+}
+
+.anketa-contact {
+  background: var(--gray);
+  padding: 24px;
+  border-radius: 12px;
+  margin-top: 32px;
   text-align: center;
-  padding: 24px 0 16px 0;
-  font-size: 0.95rem;
-  border-top: 1px solid var(--border);
-  margin-top: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  border: 1px solid var(--border);
 }
 
-.contacts a {
+.anketa-contact p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.anketa-contact a {
   color: var(--accent-dark);
-  text-decoration: underline;
+  text-decoration: none;
+  font-weight: 600;
   transition: color 0.2s;
 }
 
-.contacts a:hover {
+.anketa-contact a:hover {
   color: var(--accent);
+  text-decoration: underline;
 }
 
-.contacts a:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+/* Дополнительные стили для cart-form */
+.cart-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 32px auto;
+  background: var(--card-bg);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  border: 1px solid var(--border);
+}
+
+.cart-form h2 {
+  margin: 0 0 16px 0;
+  color: var(--accent-dark);
+  text-align: center;
+}
+
+.cart-form label {
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.cart-form input, 
+.cart-form textarea {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--main-bg);
+  color: var(--main-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.cart-form input:focus, 
+.cart-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(233,126,178,0.1);
+}
+
+.cart-contact {
+  background: var(--gray);
+  padding: 24px;
+  border-radius: 12px;
+  margin-top: 32px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+/* Стили для новостей */
+.news-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin: 32px 0;
+}
+
+.news-item {
+  background: var(--card-bg);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.news-item h2 {
+  margin: 0 0 8px 0;
+  color: var(--accent-dark);
+  font-size: 1.3rem;
+}
+
+.news-date {
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.news-item p:last-child {
+  margin-bottom: 0;
+}
+
+.news-contact {
+  background: var(--gray);
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 600px) {
+  .anketa-form, .cart-form {
+    padding: 20px;
+  }
+  
+  .anketa-main {
+    padding: 16px;
+  }
 }
 
 @media (max-width: 800px) {
