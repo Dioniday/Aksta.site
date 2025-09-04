@@ -1,7 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог оборудования — ООО АКСТА</title>
+    <meta name="description" content="Каталог металлообрабатывающего оборудования и станков от ведущих производителей. Скачать техническую документацию.">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <script defer src="../assets/js/main.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-block">
+            <span class="logo">ооо<span class="logo-accent">АКСТА</span></span>
+            <span class="logo-desc">- оборудование<br>- инструмент<br>- технология</span>
+        </div>
+        <nav class="nav">
+            <a href="../index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="tools.html">Инструмент</a>
+            <a href="service.html">Сервис</a>
+            <a href="education.html">Обучение</a>
+            <a href="news.html">Новости</a>
+            <a href="cart.html">Корзина</a>
+            <a href="anketa.html">Анкета</a>
+            <button id="theme-toggle" aria-label="Переключить тему"></button>
+        </nav>
+    </header>
     <main>
         <section class="catalog-hero">
             <h1>Каталог оборудования</h1>
             <p class="text-secondary">Профессиональное металлообрабатывающее оборудование от ведущих мировых производителей</p>
+        </section>
+        
+        <!-- PDF Catalogs Section -->
+        <section class="pdf-catalogs">
+            <div class="container">
+                <h2>📋 Скачать каталоги производителей</h2>
+                <p>Полные технические каталоги с характеристиками оборудования</p>
+                <div class="catalog-downloads">
+                    <div class="catalog-download-card">
+                        <div class="catalog-icon">🏭</div>
+                        <h3>Esuntek EDM</h3>
+                        <p>Электроэрозионные станки: проволочно-вырезные, копировально-прошивные, супердрель</p>
+                        <a href="../catalogs/Esuntek EDM Machine J.pdf" download class="btn-download">📥 Скачать PDF</a>
+                    </div>
+                    <div class="catalog-download-card">
+                        <div class="catalog-icon">⚙️</div>
+                        <h3>DONGS Equipment</h3>
+                        <p>Универсальное металлообрабатывающее оборудование</p>
+                        <a href="../catalogs/DONGS.xlsx" download class="btn-download">📥 Скачать XLSX</a>
+                    </div>
+                    <div class="catalog-download-card">
+                        <div class="catalog-icon">🔧</div>
+                        <h3>DONGS Vertical</h3>
+                        <p>Вертикальные обрабатывающие центры</p>
+                        <a href="../catalogs/DONGS Vertical .xlsx" download class="btn-download">📥 Скачать XLSX</a>
+                    </div>
+                    <div class="catalog-download-card">
+                        <div class="catalog-icon">🇺🇸</div>
+                        <h3>US Wheeler</h3>
+                        <p>Американское производственное оборудование</p>
+                        <a href="../catalogs/US Wheeler-Catalog.pdf" download class="btn-download">📥 Скачать PDF</a>
+                    </div>
+                </div>
+            </div>
         </section>
         
         <div class="catalog-container">
@@ -97,4 +159,13 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Toast Notification -->
+        <div id="toast-notification" class="toast-notification" style="display: none;"></div>
     </main>
+    <footer class="footer">
+        <span>© ООО «АКСТА», 2024</span>
+        <span>Сделано с любовью и вниманием к деталям</span>
+    </footer>
+</body>
+</html>
