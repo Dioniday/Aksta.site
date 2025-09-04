@@ -863,6 +863,324 @@ function addEsuntekFilter() {
   }
 }
 
+// New Cart Functions
+function showQuestionsModal() {
+  const modal = document.getElementById('questions-modal');
+  if (modal) {
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeQuestionsModal() {
+  const modal = document.getElementById('questions-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+function clearCartWithConfirm() {
+  if (confirm('Вы уверены, что хотите очистить корзину?')) {
+    clearCart();
+    updateCartCounter();
+    renderCart();
+    updateCartTotalCount();
+    showToast('Корзина очищена', 'success');
+  }
+}
+
+// Update cart total count in new cart design
+function updateCartTotalCount() {
+  const cart = getCart();
+  const totalCountElement = document.getElementById('cart-total-count');
+  
+  if (totalCountElement) {
+    totalCountElement.textContent = cart.length;
+  }
+}
+
+// Enhanced cart rendering for new design
+function renderCart() {
+  const cartItemsDiv = document.getElementById('cart-items');
+  if (!cartItemsDiv) return;
+  
+  const cart = getCart();
+  
+  if (cart.length === 0) {
+    cartItemsDiv.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <h3>Ваша корзина пуста</h3>
+        <p>Добавьте оборудование из каталога, чтобы оформить запрос</p>
+        <a href="catalog.html" class="btn-main">Перейти в каталог</a>
+      </div>
+    `;
+    return;
+  }
+  
+  let html = '<div class="cart-items-list">';
+  cart.forEach((item, index) => {
+    html += `
+      <div class="cart-item modern-card" data-index="${index}">
+        <div class="cart-item-image">
+          <div class="cart-item-placeholder">🏭</div>
+        </div>
+        <div class="cart-item-content">
+          <div class="cart-item-header">
+            <h4 class="cart-item-name">${item.name}</h4>
+            <button class="cart-item-remove" onclick="removeCartItem(${index})" aria-label="Удалить товар">✕</button>
+          </div>
+          <div class="cart-item-details">
+            <span class="cart-item-brand">🏢 ${item.brand || ''}</span>
+            <span class="cart-item-category">📍 ${item.type || ''}</span>
+          </div>
+          <div class="cart-item-description">${item.comment || ''}</div>
+          <div class="cart-item-meta">
+            <span class="cart-item-date">📅 ${formatDate(item.dateAdded)}</span>
+            <span class="cart-item-priority priority-${item.priority || 'normal'}">${getPriorityText(item.priority)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  
+  cartItemsDiv.innerHTML = html;
+  
+  // Add animation to cart items
+  const cartItems = cartItemsDiv.querySelectorAll('.cart-item');
+  cartItems.forEach((item, index) => {
+    item.style.animationDelay = `${index * 0.1}s`;
+    item.classList.add('fade-in');
+  });
+  
+  // Update total count
+  updateCartTotalCount();
+}
+
+// Get priority text
+function getPriorityText(priority) {
+  switch(priority) {
+    case 'high': return '⚡ Высокий';
+    case 'low': return '🔽 Низкий';
+    default: return '🔸 Обычный';
+  }
+}
+
+// Enhanced remove cart item with animation
+function removeCartItem(index) {
+  const cart = getCart();
+  const item = cart[index];
+  
+  if (confirm(`Удалить "${item.name}" из корзины?`)) {
+    // Add remove animation
+    const cartItemElement = document.querySelector(`[data-index="${index}"]`);
+    if (cartItemElement) {
+      cartItemElement.style.animation = 'fadeOutRight 0.3s ease-out';
+      setTimeout(() => {
+        cart.splice(index, 1);
+        setCart(cart);
+        updateCartCounter();
+        renderCart();
+        showToast('Товар удалён из корзины', 'success');
+      }, 300);
+    }
+  }
+}
+
+// Initialize cart page
+function initCartPage() {
+  renderCart();
+  updateCartCounter();
+  updateCartTotalCount();
+}
+
+// Quick Request Modal Functions
+function showQuickRequestModal() {
+  const cart = getCart();
+  
+  if (cart.length === 0) {
+    showToast('Корзина пуста! Добавьте товары для отправки запроса.', 'error');
+    return;
+  }
+  
+  const modal = document.getElementById('quick-request-modal');
+  if (modal) {
+    // Обновляем список товаров
+    updateQuickRequestItems();
+    
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeQuickRequestModal() {
+  const modal = document.getElementById('quick-request-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+function updateQuickRequestItems() {
+  const cart = getCart();
+  const itemsContainer = document.getElementById('quick-request-items');
+  
+  if (!itemsContainer) return;
+  
+  let html = '';
+  
+  if (cart.length === 0) {
+    html = '<p class="no-items">🙁 Корзина пуста</p>';
+  } else {
+    cart.forEach((item, index) => {
+      html += `
+        <div class="request-item">
+          <div class="item-info">
+            <div class="item-icon">🏭</div>
+            <div class="item-details">
+              <strong>${item.name}</strong>
+              <small>🏢 ${item.brand || 'Не указан'} | 📍 ${item.type || 'Не указан'}</small>
+              ${item.comment ? `<p class="item-comment">${item.comment}</p>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+  
+  itemsContainer.innerHTML = html;
+}
+
+// Handle quick request form submission
+function initQuickRequestForm() {
+  const form = document.getElementById('quick-request-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const cart = getCart();
+      
+      // Собираем данные для отправки
+      const requestData = {
+        company: formData.get('company'),
+        contact: formData.get('contact'),
+        phone: formData.get('phone'),
+        email: formData.get('email'),
+        comment: formData.get('comment'),
+        items: cart,
+        timestamp: new Date().toISOString(),
+        type: 'quick_request'
+      };
+      
+      // Отправляем запрос
+      sendQuickRequest(requestData);
+    });
+  }
+}
+
+function sendQuickRequest(data) {
+  // Пока что имитируем отправку
+  console.log('Отправка запроса:', data);
+  
+  // Показываем сообщение об отправке
+  showToast(`Запрос отправлен! Мы свяжемся с вами в течение 24 часов.`, 'success');
+  
+  // Закрываем модальное окно
+  closeQuickRequestModal();
+  
+  // Очищаем корзину после отправки
+  setTimeout(() => {
+    clearCart();
+    updateCartCounter();
+    renderCart();
+    updateCartTotalCount();
+  }, 1000);
+  
+  // Здесь будет реальная отправка на сервер
+  // sendEmailRequest(data);
+}
+
+// Initialize cart on cart page
+if (window.location.pathname.endsWith('cart.html')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    initCartPage();
+    initQuickRequestForm();
+  });
+}
+
+// Anketa Form Handler
+function initAnketaForm() {
+  const form = document.getElementById('anketa-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      
+      const anketaData = {
+        company: formData.get('company'),
+        contact: formData.get('contact'),
+        contactMethod: formData.get('contact-method'),
+        q1: formData.get('q1'),
+        q2: formData.get('q2'),
+        q3: formData.get('q3'),
+        q4: formData.get('q4'),
+        q5: formData.get('q5'),
+        q6: formData.get('q6'),
+        timestamp: new Date().toISOString(),
+        type: 'full_anketa'
+      };
+      
+      sendAnketa(anketaData);
+    });
+  }
+}
+
+function sendAnketa(data) {
+  // Пока что имитируем отправку
+  console.log('Отправка анкеты:', data);
+  
+  // Показываем сообщение об отправке
+  showToast('Анкета отправлена! Мы свяжемся с вами в течение 24 часов.', 'success');
+  
+  // Очищаем форму
+  const form = document.getElementById('anketa-form');
+  if (form) {
+    form.reset();
+  }
+  
+  // Здесь будет реальная отправка на сервер
+  /*
+  // Пример отправки на сервер
+  fetch('/send-anketa', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    showToast('Анкета отправлена!', 'success');
+  })
+  .catch(error => {
+    showToast('Ошибка отправки. Попробуйте позже.', 'error');
+  });
+  */
+}
+
+// Initialize anketa form on anketa page
+if (window.location.pathname.endsWith('anketa.html')) {
+  document.addEventListener('DOMContentLoaded', initAnketaForm);
+}
+
 // Initialize catalog on catalog page
 if (window.location.pathname.endsWith('catalog.html')) {
   document.addEventListener('DOMContentLoaded', initCatalog);

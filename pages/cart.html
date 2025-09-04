@@ -25,31 +25,203 @@
         </nav>
     </header>
     <main>
-        <section class="cart-main">
-            <h1>Корзина</h1>
-            <p>Здесь отображаются выбранные вами позиции оборудования и инструмента. После формирования заявки вы можете отправить её нашему менеджеру для уточнения цены и условий поставки.</p>
-            <div id="cart-items">
-                <p>Ваша корзина пуста.</p>
-                <!-- Здесь будут отображаться выбранные товары -->
-            </div>
-            <form id="cart-form" class="cart-form">
-                <h2>Оформить заявку</h2>
-                <label for="company">Компания</label>
-                <input type="text" id="company" name="company" required>
-                <label for="fio">Контактное лицо</label>
-                <input type="text" id="fio" name="fio" required>
-                <label for="phone">Телефон</label>
-                <input type="tel" id="phone" name="phone" required>
-                <label for="email">Электронная почта</label>
-                <input type="email" id="email" name="email" required>
-                <label for="comment">Комментарий к заявке</label>
-                <textarea id="comment" name="comment" rows="3"></textarea>
-                <button type="submit" class="btn-main">Отправить заявку</button>
-            </form>
-            <div class="cart-contact">
-                <p>По всем вопросам вы можете связаться с менеджером:<br>Яна<br>+7 963 135 48 37<br><a href="mailto:sale_aksta@stankirb.ru">sale_aksta@stankirb.ru</a></p>
+        <section class="cart-hero">
+            <div class="container">
+                <div class="cart-header">
+                    <h1>🛒 Корзина товаров</h1>
+                    <p class="cart-subtitle">Отобранное вами оборудование для запроса коммерческого предложения</p>
+                </div>
             </div>
         </section>
+        
+        <section class="cart-content">
+            <div class="container">
+                <div class="cart-wrapper">
+                    <div class="cart-items-section">
+                        <div class="cart-items-header">
+                            <h2>Выбранные товары</h2>
+                            <div class="cart-counter-badge">
+                                <span id="cart-total-count">0</span> 
+                                <span class="cart-counter-text">позиций</span>
+                            </div>
+                        </div>
+                        
+                        <div id="cart-items" class="cart-items-container">
+                            <!-- Товары будут загружаться сюда -->
+                        </div>
+                    </div>
+                    
+                    <div class="cart-actions-section">
+                        <div class="cart-summary">
+                            <h3>📋 Готовы к отправке запроса?</h3>
+                            <p>Мы подготовим коммерческое предложение с ценами, характеристиками и условиями поставки для всех товаров в корзине.</p>
+                            
+                            <div class="cart-actions">
+                                <button class="btn-main btn-request" onclick="showQuickRequestModal()">
+                                    📤 Отправить запрос
+                                    <small>Быстрый запрос КП</small>
+                                </button>
+                                
+                                <a href="anketa.html" class="btn-secondary" style="text-decoration: none; text-align: center;">
+                                    📝 Подробная анкета
+                                    <small>Детальные требования</small>
+                                </a>
+                                
+                                <button class="btn-secondary btn-questions" onclick="showQuestionsModal()">
+                                    ❓ Есть вопросы?
+                                    <small>Задать вопрос менеджеру</small>
+                                </button>
+                                
+                                <button class="btn-secondary btn-clear-cart" onclick="clearCartWithConfirm()">
+                                    🗑️ Очистить корзину
+                                </button>
+                            </div>
+                            
+                            <div class="cart-info">
+                                <div class="info-card">
+                                    <div class="info-icon">⏱️</div>
+                                    <div class="info-content">
+                                        <strong>Быстрый ответ</strong>
+                                        <span>КП в течение 24 часов</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="info-icon">✅</div>
+                                    <div class="info-content">
+                                        <strong>Бесплатно</strong>
+                                        <span>Консультация и расчёт</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-card">
+                                    <div class="info-icon">🎯</div>
+                                    <div class="info-content">
+                                        <strong>Индивидуально</strong>
+                                        <span>Под ваши требования</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cart-contact">
+                            <h4>📞 Связаться напрямую</h4>
+                            <div class="contact-card">
+                                <div class="contact-avatar">👩‍💼</div>
+                                <div class="contact-info">
+                                    <strong>Яна</strong>
+                                    <span>Менеджер по продажам</span>
+                                    <div class="contact-methods">
+                                        <a href="tel:+79631354837" class="contact-link">
+                                            📱 +7 963 135 48 37
+                                        </a>
+                                        <a href="mailto:sale_aksta@stankirb.ru" class="contact-link">
+                                            ✉️ sale_aksta@stankirb.ru
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Модальное окно для вопросов -->
+        <div id="questions-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>❓ Есть вопросы?</h3>
+                    <button class="modal-close" onclick="closeQuestionsModal()" aria-label="Закрыть">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>Выберите удобный способ связи:</p>
+                    <div class="questions-options">
+                        <a href="anketa.html" class="question-option">
+                            <div class="option-icon">📝</div>
+                            <div class="option-content">
+                                <strong>Подробная анкета</strong>
+                                <small>Заполните форму для точного КП</small>
+                            </div>
+                        </a>
+                        <a href="tel:+79631354837" class="question-option">
+                            <div class="option-icon">📞</div>
+                            <div class="option-content">
+                                <strong>Позвонить менеджеру</strong>
+                                <small>+7 963 135 48 37 (Яна)</small>
+                            </div>
+                        </a>
+                        <a href="mailto:sale_aksta@stankirb.ru" class="question-option">
+                            <div class="option-icon">✉️</div>
+                            <div class="option-content">
+                                <strong>Написать на email</strong>
+                                <small>sale_aksta@stankirb.ru</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Модальное окно быстрого запроса -->
+        <div id="quick-request-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📤 Быстрый запрос КП</h3>
+                    <button class="modal-close" onclick="closeQuickRequestModal()" aria-label="Закрыть">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="quick-request-form" class="quick-request-form">
+                        <div class="form-section">
+                            <h4>🏢 Контактные данные</h4>
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label for="quick-company">Компания *</label>
+                                    <input type="text" id="quick-company" name="company" required placeholder="Название компании">
+                                </div>
+                                <div class="form-field">
+                                    <label for="quick-contact">Контактное лицо *</label>
+                                    <input type="text" id="quick-contact" name="contact" required placeholder="ФИО">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label for="quick-phone">Телефон *</label>
+                                    <input type="tel" id="quick-phone" name="phone" required placeholder="+7 (___) ___-__-__">
+                                </div>
+                                <div class="form-field">
+                                    <label for="quick-email">Электронная почта *</label>
+                                    <input type="email" id="quick-email" name="email" required placeholder="email@company.com">
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <label for="quick-comment">Комментарий</label>
+                                <textarea id="quick-comment" name="comment" rows="3" placeholder="Дополнительные пожелания или требования..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h4>📋 Запрашиваемое оборудование</h4>
+                            <div id="quick-request-items" class="request-items">
+                                <!-- Список товаров будет загружен сюда -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn-main btn-submit">
+                                📤 Отправить запрос
+                            </button>
+                            <button type="button" class="btn-secondary" onclick="closeQuickRequestModal()">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Toast для уведомлений -->
+        <div id="toast-notification" class="toast-notification" style="display: none;"></div>
     </main>
     <footer class="footer">
         <span>© ООО «АКСТА», 2024</span>
