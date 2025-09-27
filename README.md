@@ -85,7 +85,7 @@ http://localhost:8000
 ## 📞 Контактная информация
 
 **ООО «АКСТА»**
-- 📧 Email: sale_aksta@stankirb.ru
+- 📧 Email: aksta.llc@gmail.com
 - 📱 Телефон: +7 963 135 48 37
 
 ## 📝 TODO

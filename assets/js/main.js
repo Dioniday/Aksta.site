@@ -52,16 +52,18 @@ function initMobileNavigation() {
 }
 
 // Initialize mobile navigation on load
-document.addEventListener('DOMContentLoaded', initMobileNavigation);
+document.addEventListener('DOMContentLoaded', () => {
+  initMobileNavigation();
+  // Инициализация счётчика корзины на всех страницах
+  try { updateCartCounter(); } catch {}
+});
 
 function setTheme(theme) {
   root.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
-  // Меняем иконку кнопки
-  if (theme === 'dark') {
-    themeToggle.innerHTML = '🌙';
-  } else {
-    themeToggle.innerHTML = '☀️';
+  // Меняем иконку кнопки (если она есть на странице)
+  if (themeToggle) {
+    themeToggle.innerHTML = theme === 'dark' ? '🌙' : '☀️';
   }
 }
 
@@ -76,10 +78,12 @@ function setTheme(theme) {
   }
 })();
 
-themeToggle.addEventListener('click', () => {
-  const current = root.getAttribute('data-theme');
-  setTheme(current === 'dark' ? 'light' : 'dark');
-});
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    setTheme(current === 'dark' ? 'light' : 'dark');
+  });
+}
 
 // Enhanced cart functionality with visual feedback
 const CART_KEY = 'aksta_cart';
@@ -561,15 +565,28 @@ function createProductCard(product) {
         </div>
       </div>
       <div class="product-card-actions">
-        <button class="btn-card-primary" onclick="addProductToCart(${product.id})">Добавить в корзину</button>
+        <button class="btn-card-primary" onclick="handleAddToCartClick(this, ${product.id})">Добавить в корзину</button>
         <button class="btn-card-secondary" onclick="showProductDetails(${product.id})">
-          ${product.detailedSpecs ? 'Подробные характеристики' : 'Подробнее'}
+          ${product.detailedSpecs ? 'Характеристики' : 'Подробнее'}
         </button>
       </div>
     </div>
   `;
   
   return card;
+}
+
+// UX-обработчик клика по кнопке добавления в корзину
+function handleAddToCartClick(btn, productId) {
+  if (!btn) return addProductToCart(productId);
+  btn.disabled = true;
+  const prevText = btn.textContent;
+  btn.textContent = '✅ Добавлено';
+  addProductToCart(productId);
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = prevText;
+  }, 1200);
 }
 
 // Get product icon based on category
@@ -1086,8 +1103,27 @@ function initQuickRequestForm() {
 }
 
 function sendQuickRequest(data) {
-  // Пока что имитируем отправку
-  console.log('Отправка запроса:', data);
+  // Формируем письмо через mailto на указанный ящик
+  try {
+    const subject = encodeURIComponent(`Быстрый запрос КП — ${data.company || ''}`);
+    const bodyLines = [
+      `Компания: ${data.company || ''}`,
+      `Контактное лицо: ${data.contact || ''}`,
+      `Телефон: ${data.phone || ''}`,
+      `Email: ${data.email || ''}`,
+      `Комментарий: ${data.comment || ''}`,
+      '',
+      'Товары:',
+      ...(data.items || []).map((it, i) => `${i + 1}. ${it.name} | ${it.brand} | ${it.type}`),
+      '',
+      `Отправлено: ${new Date().toLocaleString('ru-RU')}`
+    ];
+    const body = encodeURIComponent(bodyLines.join('\n'));
+    const mailto = `mailto:aksta.llc@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
+  } catch (e) {
+    console.warn('Не удалось открыть почтовый клиент:', e);
+  }
   
   // Показываем сообщение об отправке
   showToast(`Запрос отправлен! Мы свяжемся с вами в течение 24 часов.`, 'success');
@@ -1144,8 +1180,29 @@ function initAnketaForm() {
 }
 
 function sendAnketa(data) {
-  // Пока что имитируем отправку
-  console.log('Отправка анкеты:', data);
+  // Отправка через mailto
+  try {
+    const subject = encodeURIComponent(`Анкета — ${data.company || ''}`);
+    const bodyLines = [
+      `Компания: ${data.company || ''}`,
+      `Контактное лицо: ${data.contact || ''}`,
+      `Способ связи: ${data.contactMethod || ''}`,
+      '',
+      `1) ${data.q1 || ''}`,
+      `2) ${data.q2 || ''}`,
+      `3) ${data.q3 || ''}`,
+      `4) ${data.q4 || ''}`,
+      `5) ${data.q5 || ''}`,
+      `6) ${data.q6 || ''}`,
+      '',
+      `Отправлено: ${new Date().toLocaleString('ru-RU')}`
+    ];
+    const body = encodeURIComponent(bodyLines.join('\n'));
+    const mailto = `mailto:aksta.llc@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
+  } catch (e) {
+    console.warn('Не удалось открыть почтовый клиент:', e);
+  }
   
   // Показываем сообщение об отправке
   showToast('Анкета отправлена! Мы свяжемся с вами в течение 24 часов.', 'success');
@@ -1185,3 +1242,84 @@ if (window.location.pathname.endsWith('anketa.html')) {
 if (window.location.pathname.endsWith('catalog.html')) {
   document.addEventListener('DOMContentLoaded', initCatalog);
 }
+
+// Init tools/service request forms (standalone pages)
+document.addEventListener('DOMContentLoaded', () => {
+  // Prefill tools category from CTA buttons
+  document.querySelectorAll('a[href="#tool-request"]').forEach(link => {
+    link.addEventListener('click', () => {
+      const val = link.getAttribute('data-category');
+      const select = document.getElementById('tr-category');
+      if (val && select) select.value = val;
+    });
+  });
+
+  // Prefill service type from CTA buttons
+  document.querySelectorAll('a[href="#service-request"]').forEach(link => {
+    link.addEventListener('click', () => {
+      const val = link.getAttribute('data-service');
+      const select = document.getElementById('sr-type');
+      if (val && select) select.value = val;
+    });
+  });
+  // Tools request form
+  const toolForm = document.getElementById('tool-request-form');
+  if (toolForm) {
+    toolForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(toolForm);
+      const payload = {
+        page: 'tools',
+        category: fd.get('category'),
+        company: fd.get('company'),
+        contact: fd.get('contact'),
+        email: fd.get('email'),
+        comment: fd.get('comment')
+      };
+      const subject = encodeURIComponent(`Запрос инструмента — ${payload.category || ''} — ${payload.company || ''}`);
+      const body = encodeURIComponent([
+        `Категория: ${payload.category || ''}`,
+        `Компания: ${payload.company || ''}`,
+        `Контактное лицо: ${payload.contact || ''}`,
+        `Email: ${payload.email || ''}`,
+        `Комментарий: ${payload.comment || ''}`,
+        `Отправлено: ${new Date().toLocaleString('ru-RU')}`
+      ].join('\n'));
+      window.location.href = `mailto:aksta.llc@gmail.com?subject=${subject}&body=${body}`;
+      showToast('Запрос отправлен! Мы свяжемся с вами в течение 24 часов.', 'success');
+      toolForm.reset();
+    });
+  }
+
+  // Service request form
+  const serviceForm = document.getElementById('service-request-form');
+  if (serviceForm) {
+    serviceForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(serviceForm);
+      const payload = {
+        page: 'service',
+        service: fd.get('service'),
+        company: fd.get('company'),
+        contact: fd.get('contact'),
+        email: fd.get('email'),
+        comment: fd.get('comment')
+      };
+      const subject = encodeURIComponent(`Запрос сервиса — ${payload.service || ''} — ${payload.company || ''}`);
+      const body = encodeURIComponent([
+        `Услуга: ${payload.service || ''}`,
+        `Компания: ${payload.company || ''}`,
+        `Контактное лицо: ${payload.contact || ''}`,
+        `Email: ${payload.email || ''}`,
+        `Комментарий: ${payload.comment || ''}`,
+        `Отправлено: ${new Date().toLocaleString('ru-RU')}`
+      ].join('\n'));
+      window.location.href = `mailto:aksta.llc@gmail.com?subject=${subject}&body=${body}`;
+      showToast('Запрос отправлен! Мы свяжемся с вами в течение 24 часов.', 'success');
+      serviceForm.reset();
+    });
+  }
+
+  // Обновляем счётчик корзины после инициализации форм/страницы
+  try { updateCartCounter(); } catch {}
+});

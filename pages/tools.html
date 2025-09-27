@@ -15,7 +15,7 @@
         </div>
         <nav class="nav">
             <a href="../index.html">Главная</a>
-            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html">Оборудование</a>
             <a href="tools.html">Инструмент</a>
             <a href="service.html">Сервис</a>
             <a href="education.html">Обучение</a>
@@ -28,6 +28,14 @@
     <main>
         <!-- Modern Tools Hero -->
         <section class="tools-hero">
+            <div class="hero-background">
+                <div class="hero-particles"></div>
+                <div class="hero-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                </div>
+            </div>
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-badge">
@@ -70,7 +78,7 @@
                                 <span class="feature-tag">Торцевые</span>
                                 <span class="feature-tag">Шпоночные</span>
                             </div>
-                            <a href="anketa.html" class="btn-tool">📤 Запросить КП</a>
+                            <a href="#tool-request" class="btn-tool" data-category="Фрезы">📤 Запросить КП</a>
                         </div>
                     </div>
                     
@@ -84,7 +92,7 @@
                                 <span class="feature-tag">Центровочные</span>
                                 <span class="feature-tag">Ступенчатые</span>
                             </div>
-                            <a href="anketa.html" class="btn-tool">📤 Запросить КП</a>
+                            <a href="#tool-request" class="btn-tool" data-category="Сверла">📤 Запросить КП</a>
                         </div>
                     </div>
                     
@@ -98,7 +106,7 @@
                                 <span class="feature-tag">Подрезные</span>
                                 <span class="feature-tag">Резьбовые</span>
                             </div>
-                            <a href="anketa.html" class="btn-tool">📤 Запросить КП</a>
+                            <a href="#tool-request" class="btn-tool" data-category="Резцы">📤 Запросить КП</a>
                         </div>
                     </div>
                     
@@ -112,7 +120,7 @@
                                 <span class="feature-tag">Цанги</span>
                                 <span class="feature-tag">Державки</span>
                             </div>
-                            <a href="anketa.html" class="btn-tool">📤 Запросить КП</a>
+                            <a href="#tool-request" class="btn-tool" data-category="Оснастка">📤 Запросить КП</a>
                         </div>
                     </div>
                     
@@ -126,7 +134,7 @@
                                 <span class="feature-tag">Керамические</span>
                                 <span class="feature-tag">CBN/PCD</span>
                             </div>
-                            <a href="anketa.html" class="btn-tool">📤 Запросить КП</a>
+                            <a href="#tool-request" class="btn-tool" data-category="Пластины">📤 Запросить КП</a>
                         </div>
                     </div>
                     
@@ -140,144 +148,114 @@
                                 <span class="feature-tag">Абразивы</span>
                                 <span class="feature-tag">Расходники</span>
                             </div>
-                            <a href="anketa.html" class="btn-tool">📤 Запросить КП</a>
+                            <a href="#tool-request" class="btn-tool" data-category="СОЖ и расходники">📤 Запросить КП</a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Request form for tools -->
+    <section id="tool-request" class="tool-request" style="padding: 32px 0;">
+            <div class="container">
+        <h2 class="section-title">📝 Запрос на подбор инструмента</h2>
+                <p class="section-subtitle">Выберите категорию и кратко опишите задачу — мы пришлём КП на почту</p>
+                <form id="tool-request-form" class="quick-request-form">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="tr-category">Категория инструмента *</label>
+                            <select id="tr-category" name="category" required>
+                                <option value="">— выберите —</option>
+                                <option>Фрезы</option>
+                                <option>Сверла</option>
+                                <option>Резцы</option>
+                                <option>Оснастка</option>
+                                <option>Пластины</option>
+                                <option>СОЖ и расходники</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="tr-company">Компания *</label>
+                            <input type="text" id="tr-company" name="company" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="tr-contact">Контактное лицо *</label>
+                            <input type="text" id="tr-contact" name="contact" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="tr-email">Email *</label>
+                            <input type="email" id="tr-email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="tr-comment">Комментарий</label>
+                        <textarea id="tr-comment" name="comment" rows="3" placeholder="Материал, операция, параметры..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-main">📤 Отправить запрос</button>
+                    </div>
+                </form>
             </div>
         </section>
         
         <!-- Tool Brands -->
         <section class="tool-brands">
             <div class="container">
-                <h2 class="section-title">🏭 Производители инструмента</h2>
-                <p class="section-subtitle">Работаем с ведущими мировыми брендами металлорежущего инструмента</p>
+                <h2 class="section-title">🏭 География поставщиков</h2>
+                <p class="section-subtitle">Работаем со странами-производителями: Корея, Швеция, Германия, Япония, Чехия, Португалия, Израиль, США, Италия, Франция, Россия</p>
+                <div class="dealer-badge" style="margin: 12px 0; padding: 8px 12px; background: var(--gray); border-left: 4px solid var(--accent); border-radius: 6px;">
+                    <strong>Официальный дилер Blum</strong>
+                </div>
                 
                 <!-- Производители по странам -->
                 <div class="manufacturers-section">
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇰🇷</span>
-                            <span class="country-name">Корея</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag premium">KORLOY</span>
-                            <span class="brand-tag premium">YG-1</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇰🇷</span><span class="country-name">Корея</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇸🇪</span>
-                            <span class="country-name">Швеция</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag premium">SANDVIK</span>
-                            <span class="brand-tag premium">SECO</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇸🇪</span><span class="country-name">Швеция</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇞🇪</span>
-                            <span class="country-name">Германия</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag premium">GUHRING</span>
-                            <span class="brand-tag premium">WALTER</span>
-                            <span class="brand-tag">SCHUNK</span>
-                            <span class="brand-tag">HORN</span>
-                            <span class="brand-tag">STAHLWILLE</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇩🇪</span><span class="country-name">Германия</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇯🇵</span>
-                            <span class="country-name">Япония</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag premium">MITSUBISHI</span>
-                            <span class="brand-tag premium">KYOCERA</span>
-                            <span class="brand-tag premium">SUMITOMO</span>
-                            <span class="brand-tag premium">DIJET</span>
-                            <span class="brand-tag premium">MITUTOYO</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇯🇵</span><span class="country-name">Япония</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇨🇿</span>
-                            <span class="country-name">Чехия</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag">PRAMET</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇨🇿</span><span class="country-name">Чехия</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇵🇹</span>
-                            <span class="country-name">Португалия</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag">PALBIT</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇵🇹</span><span class="country-name">Португалия</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇮🇱</span>
-                            <span class="country-name">Израиль</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag">LAMINA</span>
-                            <span class="brand-tag">SHAVIV</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇮🇱</span><span class="country-name">Израиль</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇺🇸</span>
-                            <span class="country-name">США</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag">DEREK</span>
-                            <span class="brand-tag">GESAK</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇺🇸</span><span class="country-name">США</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇮🇹</span>
-                            <span class="country-name">Италия</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag">VERGNANO</span>
-                            <span class="brand-tag">BRICE</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇮🇹</span><span class="country-name">Италия</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇫🇷</span>
-                            <span class="country-name">Франция</span>
-                        </h3>
-                        <div class="manufacturer-brands">
-                            <span class="brand-tag">PADRE</span>
-                        </div>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇫🇷</span><span class="country-name">Франция</span></h3>
                     </div>
                     
                     <div class="manufacturer-group">
-                        <h3 class="manufacturer-country">
-                            <span class="country-flag">🇷🇺</span>
-                            <span class="country-name">Россия</span>
-                        </h3>
+                        <h3 class="manufacturer-country"><span class="country-flag">🇷🇺</span><span class="country-name">Россия</span></h3>
                         <div class="manufacturer-brands">
-                            <span class="brand-tag local">NOVA (Блюм)</span>
-                            <span class="brand-tag">SIKULAN</span>
-                            <span class="brand-tag">NANOLOY</span>
-                            <span class="brand-tag">CNC1</span>
+                            <span class="brand-tag local">Blum</span>
+                            <span class="brand-tag">Инсистенс [снс1]</span>
                         </div>
                     </div>
                 </div>

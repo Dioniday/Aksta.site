@@ -16,20 +16,36 @@
         </div>
         <nav class="nav">
             <a href="../index.html">Главная</a>
-            <a href="catalog.html">Каталог</a>
+            <a href="catalog.html">Оборудование</a>
             <a href="tools.html">Инструмент</a>
             <a href="service.html">Сервис</a>
             <a href="education.html">Обучение</a>
             <a href="news.html">Новости</a>
-            <a href="cart.html">Корзина</a>
+            <a href="cart.html">Корзина <span class="cart-counter"></span></a>
             <a href="anketa.html">Анкета</a>
             <button id="theme-toggle" aria-label="Переключить тему"></button>
         </nav>
     </header>
     <main>
         <section class="catalog-hero">
-            <h1>Каталог оборудования</h1>
-            <p class="text-secondary">Профессиональное металлообрабатывающее оборудование от ведущих мировых производителей</p>
+            <div class="hero-background">
+                <div class="hero-particles"></div>
+                <div class="hero-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-icon">📋</span>
+                        <span class="badge-text">Каталог оборудования</span>
+                    </div>
+                    <h1 class="hero-title">Каталог <span class="hero-gradient-text">оборудования</span></h1>
+                    <p class="hero-description">Профессиональные решения: фрезерные, токарные, шлифовальные, эрозионные и лазерные станки. Подберём оптимальную конфигурацию под ваши задачи.</p>
+                </div>
+            </div>
         </section>
         
         <!-- PDF Catalogs Section -->
@@ -39,26 +55,27 @@
                 <p>Полные технические каталоги с характеристиками оборудования</p>
                 <div class="catalog-downloads">
                     <div class="catalog-download-card">
-                        <div class="catalog-icon">🏭</div>
-                        <h3>Esuntek EDM</h3>
+                        <h3><span class="catalog-icon">🇨🇳</span> HDCNC</h3>
+                        <p>Каталог оборудования HDCNC (официальная брошюра)</p>
+                        <a href="../catalogs/HDCNC华东数控产品综合样本.pdf" download class="btn-download">📥 Скачать PDF</a>
+                    </div>
+                    <div class="catalog-download-card">
+                        <h3><span class="catalog-icon">🏭</span> Esuntek EDM</h3>
                         <p>Электроэрозионные станки: проволочно-вырезные, копировально-прошивные, супердрель</p>
                         <a href="../catalogs/Esuntek EDM Machine J.pdf" download class="btn-download">📥 Скачать PDF</a>
                     </div>
                     <div class="catalog-download-card">
-                        <div class="catalog-icon">⚙️</div>
-                        <h3>DONGS Equipment</h3>
+                        <h3><span class="catalog-icon">⚙️</span> DONGS Equipment</h3>
                         <p>Универсальное металлообрабатывающее оборудование</p>
                         <a href="../catalogs/DONGS.xlsx" download class="btn-download">📥 Скачать XLSX</a>
                     </div>
                     <div class="catalog-download-card">
-                        <div class="catalog-icon">🔧</div>
-                        <h3>DONGS Vertical</h3>
+                        <h3><span class="catalog-icon">🔧</span> DONGS Vertical</h3>
                         <p>Вертикальные обрабатывающие центры</p>
                         <a href="../catalogs/DONGS Vertical .xlsx" download class="btn-download">📥 Скачать XLSX</a>
                     </div>
                     <div class="catalog-download-card">
-                        <div class="catalog-icon">🇺🇸</div>
-                        <h3>US Wheeler</h3>
+                        <h3><span class="catalog-icon">🇺🇸</span> US Wheeler</h3>
                         <p>Американское производственное оборудование</p>
                         <a href="../catalogs/US Wheeler-Catalog.pdf" download class="btn-download">📥 Скачать PDF</a>
                     </div>

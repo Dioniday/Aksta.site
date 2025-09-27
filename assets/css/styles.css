@@ -65,28 +65,28 @@
 }
 
 [data-theme="dark"] {
-  --main-bg: #0d1117;
-  --main-text: #f0f6fc;
-  --text-secondary: #8b949e;
+  --main-bg: #0f141a;
+  --main-text: #dbe2ea;
+  --text-secondary: #a8b0b8;
   --accent: #e97eb2;
-  --accent-dark: #d665a7;
-  --secondary: #21262d;
+  --accent-dark: #d46ca3;
+  --secondary: #1a1f26;
   --success: #2ea043;
   --warning: #fb8500;
   --error: #f85149;
-  --gray: #161b22;
-  --header-bg: #161b22;
-  --footer-bg: #0d1117;
-  --card-bg: #21262d;
-  --border: #30363d;
-  --border-light: #21262d;
+  --gray: #0f141a;
+  --header-bg: #0f141a;
+  --footer-bg: #0f141a;
+  --card-bg: #141a21;
+  --border: #252c34;
+  --border-light: #1a2128;
   --btn-main: #e97eb2;
-  --btn-main-text: #0d1117;
-  --btn-secondary: #21262d;
+  --btn-main-text: #0b0f14;
+  --btn-secondary: #161c23;
   --btn-secondary-text: #e97eb2;
-  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
-  --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
+  --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -101,6 +101,12 @@ body {
   background: var(--main-bg);
   color: var(--main-text);
   transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  min-height: 100vh;
 }
 
 /* Typography Scale */
@@ -122,6 +128,7 @@ p {
   margin-top: 0;
   margin-bottom: var(--space-md);
   line-height: var(--line-height-normal);
+  color: var(--main-text);
 }
 
 .text-secondary {
@@ -200,7 +207,7 @@ p {
 
 .nav a:hover {
   color: var(--accent);
-  background: var(--gray);
+  background: rgba(233, 126, 178, 0.08);
   transform: translateY(-1px);
 }
 
@@ -228,8 +235,8 @@ p {
 }
 
 #theme-toggle {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: var(--gray);
   border-radius: 50%;
@@ -247,15 +254,28 @@ p {
 #theme-toggle::before {
   content: "";
   display: block;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   background: var(--accent);
   border-radius: 50%;
   position: absolute;
-  top: 9px;
-  left: 9px;
+  top: 10px;
+  left: 10px;
   box-shadow: 0 0 8px var(--accent-dark);
 }
+
+/* Links */
+a { color: var(--main-text); }
+a:hover { color: var(--accent); }
+
+/* Inputs */
+input, textarea, select {
+  background: var(--card-bg);
+  color: var(--main-text);
+  border: 1px solid var(--border);
+}
+input::placeholder, textarea::placeholder { color: var(--text-secondary); }
+select { height: 42px; border-radius: var(--radius-md); padding: 0 10px; }
 
 /* Cart Counter */
 .cart-counter {
@@ -289,14 +309,13 @@ p {
 }
 
 main {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
   padding: var(--space-xl) var(--space-md) 0 var(--space-md);
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
   padding: 0 var(--space-md);
 }
 
@@ -738,18 +757,18 @@ main {
 
 /* Enhanced Catalog Layout System */
 .catalog-hero {
+  position: relative;
+  overflow: hidden;
   text-align: center;
   margin-bottom: var(--space-xxl);
-  padding: var(--space-xl) 0;
+  padding: var(--space-xxl) 0;
+  background: radial-gradient(1200px 600px at 50% -100px, color-mix(in oklab, var(--accent), transparent 82%), transparent 60%);
 }
 
-.catalog-hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--space-md);
-  background: linear-gradient(135deg, var(--main-text), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Поднять контент над анимированным фоном, использовать общий стиль заголовков */
+.catalog-hero .hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .catalog-container {
@@ -1060,7 +1079,7 @@ main {
 }
 
 .product-card-description {
-  color: var(--text-secondary);
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 12%);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   margin-bottom: var(--space-lg);
@@ -1085,21 +1104,36 @@ main {
 }
 
 .spec-item {
-  background: var(--gray);
+  background: color-mix(in oklab, var(--gray), transparent 10%);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
-  color: var(--text-secondary);
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 15%);
 }
+
+/* Improve form visibility in dark theme */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: #0f141a;
+  border-color: #2d333b;
+  color: var(--main-text);
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color: #7f8b96; }
+
+/* News excerpt contrast */
+.news-excerpt { color: color-mix(in oklab, var(--main-text), var(--text-secondary) 15%); }
 
 .product-card-actions {
   display: flex;
   gap: var(--space-sm);
   margin-top: auto;
+  align-items: stretch;
 }
 
 .btn-card-primary {
-  flex: 1;
+  flex: 1 1 auto;
   background: var(--accent);
   color: white;
   border: none;
@@ -1109,6 +1143,8 @@ main {
   cursor: pointer;
   transition: all var(--transition-normal);
   font-size: var(--font-size-sm);
+  min-height: 44px;
+  white-space: nowrap;
 }
 
 .btn-card-primary:hover {
@@ -1120,13 +1156,18 @@ main {
   background: transparent;
   color: var(--accent);
   border: 2px solid var(--accent);
-  padding: var(--space-sm) var(--space-md);
+  padding: 0 var(--space-md);
   border-radius: var(--radius-md);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-normal);
   font-size: var(--font-size-sm);
   min-width: 100px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .btn-card-secondary:hover {
@@ -1191,6 +1232,41 @@ main {
 /* Section Styles */
 .about, .catalog-preview, .service-preview, .education-preview, .anketa-preview, .contacts {
   margin-bottom: var(--space-xxl);
+}
+
+/* Прокачанный блок О компании */
+.about {
+  background: color-mix(in oklab, var(--gray), transparent 55%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+}
+.about h2 { margin-bottom: var(--space-md); }
+.about p { margin-bottom: var(--space-md); }
+.about ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-md) var(--space-xl);
+  padding-left: 0;
+  list-style: none;
+}
+.about li {
+  position: relative;
+  padding-left: 28px;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 12%);
+}
+.about li::before {
+  content: '✔️';
+  position: absolute;
+  left: 0;
+  top: 2px;
+}
+
+.catalog-preview, .service-preview, .education-preview {
+  background: color-mix(in oklab, var(--gray), transparent 60%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
 }
 
 .service-preview ul, .about ul {
@@ -1733,7 +1809,7 @@ main {
 
 /* Tools Hero Section */
 .tools-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(1200px 600px at 50% -100px, color-mix(in oklab, var(--accent), transparent 82%), transparent 60%);
     padding: 80px 0 60px;
     position: relative;
     overflow: hidden;
@@ -1741,15 +1817,7 @@ main {
 }
 
 .tools-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.5" fill="%23ffffff" opacity="0.1"/><circle cx="80" cy="80" r="1" fill="%23ffffff" opacity="0.05"/><circle cx="40" cy="70" r="1" fill="%23ffffff" opacity="0.08"/><circle cx="90" cy="30" r="1.2" fill="%23ffffff" opacity="0.06"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-    opacity: 0.3;
-    animation: float 20s ease-in-out infinite;
+  content: none;
 }
 
 .hero-content {
@@ -1781,6 +1849,14 @@ main {
     color: #ffffff;
     font-weight: 500;
     font-size: 0.9em;
+}
+/* Улучшенная читаемость малых текстов в герое на всех страницах */
+.tools-hero .badge-text,
+.service-hero .badge-text,
+.education-hero .badge-text,
+.news-hero .badge-text,
+.catalog-hero .badge-text {
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .hero-title {
@@ -1835,7 +1911,7 @@ main {
 /* Tools Categories */
 .tools-categories {
     padding: 80px 0;
-    background: #f8f9fa;
+  background: var(--gray);
     margin: 0;
 }
 
@@ -1847,10 +1923,10 @@ main {
 }
 
 .tool-card {
-    background: #ffffff;
+  background: var(--card-bg);
     border-radius: 20px;
     padding: 32px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -1872,9 +1948,9 @@ main {
 }
 
 .tool-card.featured {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #ffffff;
-    transform: scale(1.02);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  transform: scale(1.02);
 }
 
 .tool-card.featured .tool-icon {
@@ -1905,7 +1981,7 @@ main {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 16px;
-    color: #1a1a1a;
+  color: var(--main-text);
 }
 
 .tool-card.featured .tool-content h3 {
@@ -1919,14 +1995,14 @@ main {
 }
 
 .tool-content p {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 15%);
     margin-bottom: 24px;
     line-height: 1.6;
     flex-grow: 1;
 }
 
 .tool-card.featured .tool-content p {
-    color: rgba(255, 255, 255, 0.9);
+  color: color-mix(in oklab, var(--main-text), white 5%);
 }
 
 .tool-features {
@@ -1937,8 +2013,8 @@ main {
 }
 
 .feature-tag {
-    background: #e5e7eb;
-    color: #374151;
+  background: color-mix(in oklab, var(--gray), white 20%);
+  color: color-mix(in oklab, var(--main-text), #374151 30%);
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -1994,9 +2070,9 @@ main {
 
 /* Tool Brands Section */
 .tool-brands {
-    padding: 80px 0;
-    background: #ffffff;
-    margin: 0;
+  padding: 80px 0;
+  background: var(--gray);
+  margin: 0;
 }
 
 .brands-grid {
@@ -2007,19 +2083,19 @@ main {
 }
 
 .brand-card {
-    text-align: center;
-    padding: 32px 24px;
-    background: #f8f9fa;
-    border-radius: 16px;
-    transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
+  text-align: center;
+  padding: 32px 24px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
 }
 
 .brand-card:hover {
-    transform: translateY(-4px);
-    background: #ffffff;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    border-color: #3b82f6;
+  transform: translateY(-4px);
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
 }
 
 .brand-logo {
@@ -2031,20 +2107,20 @@ main {
 .brand-card h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #1a1a1a;
+  color: var(--main-text);
     margin-bottom: 8px;
 }
 
 .brand-card p {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 15%);
     font-size: 0.9rem;
     line-height: 1.5;
 }
 
 /* Tools CTA Section */
 .tools-cta {
-    padding: 80px 0;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
+  padding: 80px 0;
+  background: linear-gradient(135deg, color-mix(in oklab, var(--gray), black 10%) 0%, color-mix(in oklab, var(--secondary), black 10%) 100%);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -2175,15 +2251,24 @@ main {
     font-size: 2.5rem;
     font-weight: 700;
     text-align: center;
-    color: #1a1a1a;
+  color: var(--main-text);
     margin-bottom: 16px;
 }
 
 .section-subtitle {
     text-align: center;
     font-size: 1.2rem;
-    color: #666;
+    color: color-mix(in oklab, var(--main-text), var(--text-secondary) 18%);
     margin-bottom: 0;
+}
+
+/* Доработка отступов и выравнивания в запросе инструмента */
+#tool-request .section-subtitle {
+  margin-bottom: var(--space-xl);
+}
+
+#tool-request .form-actions {
+  justify-content: center;
 }
 
 /* Animations */
@@ -2445,13 +2530,13 @@ main {
 }
 
 .manufacturer-group {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e5e7eb;
-    transition: all 0.3s ease;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .manufacturer-group:hover {
@@ -2467,7 +2552,7 @@ main {
     margin-bottom: 16px;
     font-size: 1.3rem;
     font-weight: 600;
-    color: #1a1a1a;
+  color: var(--main-text);
 }
 
 .country-flag {
@@ -2501,8 +2586,8 @@ main {
 }
 
 .brand-tag {
-    background: #f3f4f6;
-    color: #374151;
+  background: color-mix(in oklab, var(--gray), white 20%);
+  color: color-mix(in oklab, var(--main-text), #374151 30%);
     padding: 8px 16px;
     border-radius: 25px;
     font-size: 0.9rem;
@@ -2574,14 +2659,14 @@ main {
 }
 
 .note-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 16px;
-    padding: 24px;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
+  background: color-mix(in oklab, var(--gray), transparent 40%);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
 }
 
 .note-card:hover {
@@ -2600,12 +2685,12 @@ main {
     margin: 0 0 8px 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #1a1a1a;
+  color: var(--main-text);
 }
 
 .note-content p {
     margin: 0;
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 25%);
     font-size: 0.95rem;
     line-height: 1.5;
 }
@@ -2657,7 +2742,7 @@ main {
 
 /* SERVICE PAGE STYLES */
 .service-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(1200px 600px at 50% -100px, color-mix(in oklab, var(--accent), transparent 82%), transparent 60%);
     padding: 80px 0 60px;
     position: relative;
     overflow: hidden;
@@ -2665,21 +2750,13 @@ main {
 }
 
 .service-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="tools" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><rect x="20" y="20" width="10" height="10" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23tools)"/></svg>');
-    opacity: 0.3;
-    animation: float 25s ease-in-out infinite;
+  content: none;
 }
 
 .service-cards {
-    padding: 80px 0;
-    background: #f8f9fa;
-    margin: 0;
+  padding: 80px 0;
+  background: var(--gray);
+  margin: 0;
 }
 
 .services-grid {
@@ -2690,10 +2767,10 @@ main {
 }
 
 .service-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 32px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -2730,8 +2807,8 @@ main {
 }
 
 .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow);
 }
 
 .service-card:hover::before {
@@ -2754,7 +2831,7 @@ main {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 16px;
-    color: #1a1a1a;
+  color: var(--main-text);
 }
 
 .service-card.featured .service-content h3 {
@@ -2762,7 +2839,7 @@ main {
 }
 
 .service-content p {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 25%);
     margin-bottom: 24px;
     line-height: 1.6;
     flex-grow: 1;
@@ -2892,7 +2969,7 @@ main {
 
 /* EDUCATION PAGE STYLES */
 .education-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(1200px 600px at 50% -100px, color-mix(in oklab, var(--accent), transparent 82%), transparent 60%);
     padding: 80px 0 60px;
     position: relative;
     overflow: hidden;
@@ -2900,21 +2977,13 @@ main {
 }
 
 .education-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="books" width="40" height="40" patternUnits="userSpaceOnUse"><rect x="15" y="15" width="10" height="10" fill="%23ffffff" opacity="0.08"/><circle cx="20" cy="20" r="2" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23books)"/></svg>');
-    opacity: 0.3;
-    animation: float 22s ease-in-out infinite;
+  content: none;
 }
 
 .education-materials {
-    padding: 80px 0;
-    background: #f8f9fa;
-    margin: 0;
+  padding: 80px 0;
+  background: var(--gray);
+  margin: 0;
 }
 
 .materials-grid {
@@ -2925,10 +2994,10 @@ main {
 }
 
 .material-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 32px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -2959,7 +3028,7 @@ main {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 16px;
-    color: #1a1a1a;
+  color: var(--main-text);
 }
 
 .material-card.featured .material-content h3 {
@@ -2967,7 +3036,7 @@ main {
 }
 
 .material-content p {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 25%);
     margin-bottom: 24px;
     line-height: 1.6;
     flex-grow: 1;
@@ -3010,7 +3079,7 @@ main {
 
 /* NEWS PAGE STYLES */
 .news-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(1200px 600px at 50% -100px, color-mix(in oklab, var(--accent), transparent 82%), transparent 60%);
     padding: 80px 0 60px;
     position: relative;
     overflow: hidden;
@@ -3018,21 +3087,13 @@ main {
 }
 
 .news-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="news" width="30" height="30" patternUnits="userSpaceOnUse"><rect x="10" y="10" width="10" height="10" fill="%23ffffff" opacity="0.06"/><rect x="12" y="12" width="6" height="1" fill="%23ffffff" opacity="0.08"/><rect x="12" y="14" width="4" height="1" fill="%23ffffff" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23news)"/></svg>');
-    opacity: 0.3;
-    animation: float 18s ease-in-out infinite;
+  content: none;
 }
 
 .news-content {
-    padding: 80px 0;
-    background: #f8f9fa;
-    margin: 0;
+  padding: 80px 0;
+  background: var(--gray);
+  margin: 0;
 }
 
 .news-main {
@@ -3048,10 +3109,10 @@ main {
 }
 
 .news-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 32px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -3090,7 +3151,7 @@ main {
 }
 
 .news-date {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 20%);
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -3102,7 +3163,7 @@ main {
 .news-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1a1a1a;
+  color: var(--main-text);
     margin-bottom: 16px;
     line-height: 1.3;
 }
@@ -3112,7 +3173,7 @@ main {
 }
 
 .news-excerpt {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 15%);
     line-height: 1.6;
     margin-bottom: 20px;
     font-size: 1rem;
@@ -3129,8 +3190,8 @@ main {
 }
 
 .news-tag {
-    background: #e5e7eb;
-    color: #374151;
+  background: color-mix(in oklab, var(--gray), white 20%);
+  color: color-mix(in oklab, var(--main-text), #374151 30%);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -3143,17 +3204,17 @@ main {
 }
 
 .news-contact-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 20px;
-    padding: 32px;
-    text-align: center;
-    border: 1px solid #e5e7eb;
-    transition: all 0.3s ease;
+  background: color-mix(in oklab, var(--gray), transparent 40%);
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .news-contact-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
 }
 
 .contact-icon {
@@ -3165,12 +3226,12 @@ main {
 .news-contact-card h3 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1a1a1a;
+  color: var(--main-text);
     margin-bottom: 16px;
 }
 
 .news-contact-card p {
-    color: #666;
+  color: color-mix(in oklab, var(--main-text), var(--text-secondary) 15%);
     margin-bottom: 24px;
 }
 
@@ -3297,15 +3358,18 @@ main {
 }
 
 .catalog-icon {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--space-md);
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  margin-right: var(--space-sm);
 }
 
 .catalog-download-card h3 {
-  margin-bottom: var(--space-sm);
   color: var(--main-text);
   font-size: var(--font-size-xl);
+  margin: 0 0 var(--space-sm);
 }
 
 .catalog-download-card p {
