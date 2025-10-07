@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNavigation();
   // Инициализация счётчика корзины на всех страницах
   try { updateCartCounter(); } catch {}
+  try { initCircularText(); } catch {}
+  try { initExpertiseCloudLazy(); } catch {}
 });
 
 function setTheme(theme) {
@@ -73,8 +75,8 @@ function setTheme(theme) {
   if (savedTheme) {
     setTheme(savedTheme);
   } else {
-    // По умолчанию светлая
-    setTheme('light');
+    // По умолчанию теперь тёмная тема
+    setTheme('dark');
   }
 })();
 
@@ -84,6 +86,76 @@ if (themeToggle) {
     setTheme(current === 'dark' ? 'light' : 'dark');
   });
 }
+
+// ================= CONTACTS PAGE: Circular Text =================
+function initCircularText() {
+  const wrapper = document.querySelector('.circular-wrapper');
+  if (!wrapper) return; // Not on contacts page
+  const ring = wrapper.querySelector('.circular-text');
+  if (!ring) return;
+  const sourceSpan = ring.querySelector('span');
+  if (!sourceSpan) return;
+
+  const text = sourceSpan.textContent.trim();
+  // Clear old content
+  ring.innerHTML = '';
+  const characters = [...text];
+  const total = characters.length;
+  const radius = (wrapper.offsetWidth / 2) - 20; // inner padding offset
+
+  characters.forEach((ch, i) => {
+    const angle = (360 / total) * i; // degrees
+    const letter = document.createElement('span');
+    letter.className = 'circular-letter';
+    letter.textContent = ch;
+    letter.style.setProperty('--char-rotate', angle + 'deg');
+    letter.style.transform = `rotate(${angle}deg) translateY(-${radius}px)`;
+    ring.appendChild(letter);
+  });
+
+  ring.classList.add('circular-built');
+
+  // Handle resize for responsiveness (debounced)
+  let resizeTO;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTO);
+    resizeTO = setTimeout(() => rebuildCircular(ring, wrapper, characters), 180);
+  });
+}
+
+function rebuildCircular(ring, wrapper, characters) {
+  const letters = ring.querySelectorAll('.circular-letter');
+  const radius = (wrapper.offsetWidth / 2) - 20;
+  const total = characters.length;
+  letters.forEach((letter, i) => {
+    const angle = (360 / total) * i;
+    letter.style.transform = `rotate(${angle}deg) translateY(-${radius}px)`;
+  });
+}
+
+// ================= Expertise Cloud (lazy animation) =================
+function initExpertiseCloudLazy() {
+  const cloud = document.querySelector('.expertise-cloud');
+  if (!cloud) return;
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        requestAnimationFrame(() => cloud.classList.add('animate'));
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.25 });
+  observer.observe(cloud);
+}
+
+// Respect user motion preference
+const mediaReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+if (mediaReduce.matches) {
+  document.documentElement.classList.add('reduce-motion');
+}
+mediaReduce.addEventListener('change', (e) => {
+  document.documentElement.classList.toggle('reduce-motion', e.matches);
+});
 
 // Enhanced cart functionality with visual feedback
 const CART_KEY = 'aksta_cart';
@@ -1241,6 +1313,241 @@ if (window.location.pathname.endsWith('anketa.html')) {
 // Initialize catalog on catalog page
 if (window.location.pathname.endsWith('catalog.html')) {
   document.addEventListener('DOMContentLoaded', initCatalog);
+}
+
+// ================= Dynamic Catalogs (All files) =================
+function initDynamicCatalogs(){
+  const grid = document.getElementById('allCatalogsGrid');
+  if(!grid) return; // not on page
+
+  const searchInput = document.getElementById('catalogSearch');
+  const typeSelect = document.getElementById('catalogTypeFilter');
+  const statsEl = document.querySelector('.catalogs-stats');
+
+  const groups = [
+    {
+      group: 'Новые 2025',
+      highlight: true,
+      files: [
+        'Новые каталоги 2025_[2025] Сверление.pdf',
+        'Новые каталоги 2025_[2025] Фрезерование.pdf',
+        'Новые каталоги 2_[2025] Inserts.pdf',
+        'Новые каталоги 2_[2025]Threading.pdf',
+        'Отрезка и обработка канавок NEW 2025.pdf',
+        'Фрезерные корпуса NEW 2025.pdf'
+      ]
+    },
+    {
+      group: 'Esuntek EDM',
+      files: [ 'Esuntek EDM Machine J.pdf' ]
+    },
+    {
+      group: 'DONGS',
+      files: [ 'DONGS.xlsx','DONGS Vertical .xlsx' ]
+    },
+    {
+      group: 'HDCNC (华东数控)',
+      files: [ 'HDCNC华东数控产品综合样本.pdf' ]
+    },
+    {
+      group: 'Bright Tools',
+      files: [ '2025Bright Tools金杰样册.pdf' ]
+    },
+    {
+      group: 'KTA Tools',
+      files: [ 'KTA-Product-Catalouge.pdf' ]
+    },
+    {
+      group: 'US Wheeler',
+      files: [ 'US Wheeler-Catalog.pdf' ]
+    },
+    {
+      group: 'Российский рынок',
+      files: [ 'Инструмент для российского рынка.pdf','Инструмент_оснастка.pdf' ]
+    }
+  ];
+
+  // Flatten for search & size fetch
+  const data = groups.flatMap(g => g.files.map(name => {
+    const lower = name.toLowerCase();
+    const ext = lower.endsWith('.pdf') ? 'pdf' : (lower.endsWith('.xlsx') ? 'xlsx' : 'file');
+    const is2025 = /2025|new 2025|\[2025]/i.test(name);
+    const cleanTitle = name.replace(/_/g,' ').replace(/\s{2,}/g,' ').trim();
+    return { group: g.group, highlight: !!g.highlight, name, title: cleanTitle, ext, path: `../catalogs/${name}`, tags: [is2025 ? '2025' : null].filter(Boolean), size: null };
+  }));
+
+  function render(){
+    const q = (searchInput?.value || '').toLowerCase().trim();
+    const t = (typeSelect?.value || '').toLowerCase();
+    grid.innerHTML='';
+    let shownGroups = 0;
+    groups.forEach(g => {
+      // Collect filtered files inside group
+      const filesInGroup = data.filter(f => f.group === g.group).filter(f => {
+        if(q && !f.title.toLowerCase().includes(q) && !f.group.toLowerCase().includes(q)) return false;
+        if(t && f.ext !== t) return false;
+        return true;
+      });
+      if(filesInGroup.length === 0) return;
+      shownGroups++;
+      grid.appendChild(buildGroupCard(g, filesInGroup));
+    });
+    if(shownGroups===0){
+      const empty = document.createElement('div');
+      empty.className='catalog-empty';
+      empty.textContent='Ничего не найдено по текущему фильтру.';
+      grid.appendChild(empty);
+    }
+    if(statsEl) statsEl.textContent = `Групп: ${shownGroups} / ${groups.length}`;
+  }
+
+  function buildGroupCard(groupMeta, files){
+    const card = document.createElement('article');
+    card.className='catalog-card';
+    if(groupMeta.highlight) card.classList.add('catalog-card--highlight');
+    card.setAttribute('role','group');
+    card.tabIndex=0;
+    const primaryFile = files[0];
+    const iconMap = { pdf: '📄', xlsx: '📊', file: '📁' };
+    const ico = iconMap[primaryFile.ext] || '📁';
+    const uniqueExts = Array.from(new Set(files.map(f=>f.ext.toUpperCase()))).join('/');
+    const tags = new Set(); files.forEach(f => f.tags.forEach(t => tags.add(t)));
+    card.innerHTML = `
+      <div class="catalog-card-header">
+        <div class="catalog-card-ico" aria-hidden="true">${ico}</div>
+        <div class="catalog-card-head-text">
+          <div class="catalog-card-title">${escapeHtml(groupMeta.group)}</div>
+          <div class="catalog-card-meta">${uniqueExts} • ${files.length} файл${files.length>1?'ов':''}</div>
+          <div class="catalog-card-tags">${[...tags].map(t=>`<span class="catalog-tag accent">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+      <button class="catalog-card-pin" type="button" aria-label="Закрепить группу ${escapeHtml(groupMeta.group)}" aria-pressed="false" data-pin-btn>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="m8 21 4-4 4 4"/><path d="M7 11l5 5 5-5V6a5 5 0 1 0-10 0v5Z"/></svg>
+      </button>
+      <div class="catalog-group-files">
+        ${files.map(f=>{
+          const sizeStr = f.size ? formatSize(f.size) : '…';
+          return `<div class="catalog-group-file" data-name="${escapeHtml(f.title)}" data-path="${encodeURI(f.path)}" data-ext="${f.ext}" role="button" tabindex="0" aria-label="Открыть ${escapeHtml(f.title)} (предпросмотр). Нажмите Ctrl+Enter чтобы скачать." aria-keyshortcuts="Enter Ctrl+Enter Space">
+            <span class="cgf-icon" aria-hidden="true">${iconMap[f.ext] || '📁'}</span>
+            <span class="cgf-name">${escapeHtml(f.title)}</span>
+            <span class="cgf-size catalog-file-size">${sizeStr}</span>
+            <div class="action-card" aria-label="Действия с файлом ${escapeHtml(f.title)}" role="group">
+              <div class="action-card-seg" data-action="open" tabindex="0" role="button" aria-label="Открыть файл ${escapeHtml(f.title)}">
+                <div class="action-card-icon">🔍</div>
+                <span class="action-card-label">Открыть</span>
+              </div>
+              <div class="action-card-seg" data-action="download" tabindex="0" role="button" aria-label="Скачать файл ${escapeHtml(f.title)}">
+                <div class="action-card-icon">⬇️</div>
+                <span class="action-card-label">Скачать</span>
+              </div>
+            </div>
+          </div>`;}).join('')}
+      </div>`;
+    return card;
+  }
+
+  function formatSize(bytes){
+    if(bytes < 1024) return bytes + ' B';
+    const kb = bytes/1024; if(kb < 1024) return kb.toFixed(kb>100?0:1)+' KB';
+    const mb = kb/1024; return mb.toFixed(mb>100?0:1)+' MB';
+  }
+
+  function fetchSizes(){
+    data.forEach(f => {
+      fetch(encodeURI(f.path), { method:'HEAD' }).then(r => {
+        const len = r.headers.get('Content-Length');
+        if(len){
+          f.size = parseInt(len,10);
+          // update all occurrences of this file size
+          const fileRows = grid.querySelectorAll('.catalog-group-file');
+          fileRows.forEach(row => {
+            const nameEl = row.querySelector('.cgf-name');
+            if(nameEl && nameEl.textContent === f.title){
+              const sizeEl = row.querySelector('.cgf-size');
+              if(sizeEl) sizeEl.textContent = formatSize(f.size);
+            }
+          });
+        }
+      }).catch(()=>{});
+    });
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+  }
+
+  function debounce(fn,delay){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),delay); }; }
+
+  searchInput?.addEventListener('input', debounce(render,140));
+  typeSelect?.addEventListener('change', render);
+
+  render();
+  fetchSizes();
+  
+  // Delegated events for open/download
+  grid.addEventListener('click', e => {
+    const row = e.target.closest('.catalog-group-file');
+    if(!row) return;
+    const path = row.getAttribute('data-path');
+    const seg = e.target.closest('.action-card-seg');
+    if(seg){
+      const act = seg.getAttribute('data-action');
+      if(act === 'download') {
+        triggerDownload(path);
+      } else if(act === 'open') {
+        window.open(path, '_blank', 'noopener');
+      }
+      e.stopPropagation();
+      return;
+    }
+    // Клик по строке вне action-card = открыть
+    window.open(path, '_blank', 'noopener');
+  });
+
+  grid.addEventListener('keydown', e => {
+    const row = e.target.closest('.catalog-group-file');
+    if(!row) return;
+    const path = row.getAttribute('data-path');
+    const seg = e.target.closest('.action-card-seg');
+    if(seg){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        const act = seg.getAttribute('data-action');
+        // Ctrl меняет действие на противоположное
+        if(e.ctrlKey){
+          if(act === 'open') {
+            triggerDownload(path);
+          } else if(act === 'download') {
+            window.open(path, '_blank', 'noopener');
+          }
+        } else {
+          if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
+        }
+      }
+      return; // не обрабатывать дальше
+    }
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      if(e.ctrlKey){
+        triggerDownload(path);
+      } else {
+        window.open(path, '_blank', 'noopener');
+      }
+    }
+  });
+
+  function triggerDownload(path){
+    const a = document.createElement('a');
+    a.href = path; a.download = '';
+    document.body.appendChild(a);
+    a.click();
+    requestAnimationFrame(() => a.remove());
+  }
+}
+
+// Запуск динамического списка одновременно с каталогом
+if (window.location.pathname.endsWith('catalog.html')) {
+  document.addEventListener('DOMContentLoaded', initDynamicCatalogs);
 }
 
 // Init tools/service request forms (standalone pages)
