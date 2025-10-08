@@ -1431,15 +1431,9 @@ function initDynamicCatalogs(){
             <span class="cgf-icon" aria-hidden="true">${iconMap[f.ext] || '📁'}</span>
             <span class="cgf-name">${escapeHtml(f.title)}</span>
             <span class="cgf-size catalog-file-size">${sizeStr}</span>
-            <div class="action-card" aria-label="Действия с файлом ${escapeHtml(f.title)}" role="group">
-              <div class="action-card-seg" data-action="open" tabindex="0" role="button" aria-label="Открыть файл ${escapeHtml(f.title)}">
-                <div class="action-card-icon">🔍</div>
-                <span class="action-card-label">Открыть</span>
-              </div>
-              <div class="action-card-seg" data-action="download" tabindex="0" role="button" aria-label="Скачать файл ${escapeHtml(f.title)}">
-                <div class="action-card-icon">⬇️</div>
-                <span class="action-card-label">Скачать</span>
-              </div>
+            <div class="catalog-action-card card" role="group" aria-label="Действия с файлом ${escapeHtml(f.title)}">
+              <p data-action="open" role="button" tabindex="0" aria-label="Открыть файл ${escapeHtml(f.title)}"><span>Открыть</span></p>
+              <p data-action="download" role="button" tabindex="0" aria-label="Скачать файл ${escapeHtml(f.title)}"><span>Скачать</span></p>
             </div>
           </div>`;}).join('')}
       </div>`;
@@ -1489,18 +1483,13 @@ function initDynamicCatalogs(){
     const row = e.target.closest('.catalog-group-file');
     if(!row) return;
     const path = row.getAttribute('data-path');
-    const seg = e.target.closest('.action-card-seg');
+    const seg = e.target.closest('.catalog-action-card.card p[data-action]');
     if(seg){
       const act = seg.getAttribute('data-action');
-      if(act === 'download') {
-        triggerDownload(path);
-      } else if(act === 'open') {
-        window.open(path, '_blank', 'noopener');
-      }
+      if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
       e.stopPropagation();
       return;
     }
-    // Клик по строке вне action-card = открыть
     window.open(path, '_blank', 'noopener');
   });
 
@@ -1508,31 +1497,21 @@ function initDynamicCatalogs(){
     const row = e.target.closest('.catalog-group-file');
     if(!row) return;
     const path = row.getAttribute('data-path');
-    const seg = e.target.closest('.action-card-seg');
-    if(seg){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        const act = seg.getAttribute('data-action');
-        // Ctrl меняет действие на противоположное
-        if(e.ctrlKey){
-          if(act === 'open') {
-            triggerDownload(path);
-          } else if(act === 'download') {
-            window.open(path, '_blank', 'noopener');
-          }
-        } else {
-          if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
-        }
-      }
-      return; // не обрабатывать дальше
-    }
-    if(e.key === 'Enter' || e.key === ' '){
+    const seg = e.target.closest('.catalog-action-card.card p[data-action]');
+    if(seg && (e.key === 'Enter' || e.key === ' ')){
       e.preventDefault();
+      const act = seg.getAttribute('data-action');
       if(e.ctrlKey){
-        triggerDownload(path);
+        // Ctrl = обратное действие
+        if(act === 'open') triggerDownload(path); else window.open(path, '_blank', 'noopener');
       } else {
-        window.open(path, '_blank', 'noopener');
+        if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
       }
+      return;
+    }
+    if(!seg && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      if(e.ctrlKey) triggerDownload(path); else window.open(path, '_blank', 'noopener');
     }
   });
 
