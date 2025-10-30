@@ -5,26 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог оборудования — ООО АКСТА</title>
     <meta name="description" content="Каталог металлообрабатывающего оборудования и станков от ведущих производителей. Скачать техническую документацию.">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
     <link rel="stylesheet" href="../assets/css/styles.css">
     <script defer src="../assets/js/main.js"></script>
 </head>
 <body>
-    <header class="header">
+    <header class="header" role="banner">
         <div class="logo-block">
-            <span class="logo">ооо<span class="logo-accent">АКСТА</span></span>
-            <span class="logo-desc">- оборудование<br>- инструмент<br>- технология</span>
+            <a href="../index.html" class="logo-link" aria-label="ООО АКСТА - Главная страница">
+                <span class="logo">ооо<span class="logo-accent">АКСТА</span></span>
+                <span class="logo-desc" aria-hidden="true">- оборудование<br>- инструмент<br>- технология</span>
+            </a>
         </div>
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Основная навигация">
             <a href="../index.html">Главная</a>
-            <a href="catalog.html">Оборудование</a>
+            <a href="catalog.html" aria-current="page">Оборудование</a>
             <a href="tools.html">Инструмент</a>
             <a href="service.html">Сервис</a>
             <a href="education.html">Обучение</a>
             <a href="news.html">Новости</a>
             <a href="contacts.html">Контакты</a>
-            <a href="cart.html">Корзина <span class="cart-counter"></span></a>
+            <a href="cart.html" aria-label="Корзина">
+                <span aria-hidden="true">🛒</span> Корзина
+                <span class="cart-counter" aria-label="товаров в корзине"></span>
+            </a>
             <a href="anketa.html">Анкета</a>
-            <button id="theme-toggle" aria-label="Переключить тему"></button>
+            <button id="theme-toggle" aria-label="Переключить тему оформления"></button>
         </nav>
     </header>
     <main>
@@ -107,7 +113,8 @@
             </div>
         </section>
         
-        <div class="catalog-container">
+        <!-- Catalog with filters -->
+        <section class="catalog-container">
             <!-- Filter Sidebar -->
             <aside class="catalog-sidebar">
                 <div class="filter-section">
@@ -199,16 +206,59 @@
                     <button class="btn-secondary" disabled>Следующая</button>
                 </div>
             </div>
-            </div>
-        </div>
+        </section>
         
         <!-- Toast Notification -->
         <div id="toast-notification" class="toast-notification" style="display: none;"></div>
     </main>
-    <footer class="footer">
+    
+    <!-- Modern Footer -->
+    <footer class="footer-modern" role="contentinfo">
         <div class="container">
-            <span>© ООО «АКСТА», 2024</span>
-            <span>Сделано с любовью и вниманием к деталям</span>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo">ооо<span class="logo-accent">АКСТА</span></span>
+                        <p class="footer-tagline">Оборудование. Инструмент. Технологии.</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Услуги</h4>
+                    <ul class="footer-links">
+                        <li><a href="catalog.html">Каталог оборудования</a></li>
+                        <li><a href="tools.html">Инструмент</a></li>
+                        <li><a href="service.html">Сервис</a></li>
+                        <li><a href="education.html">Обучение</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <div class="footer-contact">
+                        <p><strong>Яна</strong></p>
+                        <p><a href="tel:+79631354837" class="contact-link">📞 +7 963 135 48 37</a></p>
+                        <p><a href="mailto:aksta.llc@gmail.com" class="contact-link">📧 aksta.llc@gmail.com</a></p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Адрес</h4>
+                    <p class="footer-address">
+                        450050, Республика Башкортостан,<br>
+                        г. Уфа, ул. Дагестанская д.14/1
+                    </p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <span>© ООО «АКСТА», 2025. Все права защищены.</span>
+                </div>
+                <div class="footer-made">
+                    <span>Сделано с ❤️ и вниманием к деталям</span>
+                </div>
+            </div>
         </div>
     </footer>
 </body>
