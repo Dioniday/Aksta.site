@@ -1313,6 +1313,187 @@ if (window.location.pathname.endsWith('anketa.html')) {
 // Initialize catalog on catalog page
 if (window.location.pathname.endsWith('catalog.html')) {
   document.addEventListener('DOMContentLoaded', initCatalog);
+  document.addEventListener('DOMContentLoaded', initPDFCatalogsGrid);
+  document.addEventListener('DOMContentLoaded', initDynamicCatalogs);
+}
+
+// ================= PDF Catalogs Grid Configuration =================
+// Конфигурация каталогов - здесь можно легко изменить названия
+const CATALOG_CONFIG = {
+  'HDCNC华东数控产品综合样本.pdf': {
+    title: 'HDCNC',
+    description: 'Станки с ЧПУ',
+    icon: 'CN',
+    color: 'gradient-1'
+  },
+  'Esuntek EDM Machine J.pdf': {
+    title: 'Esuntek EDM',
+    description: 'Электроэрозия',
+    icon: 'EDM',
+    color: 'gradient-2'
+  },
+  'DONGS.xlsx': {
+    title: 'DONGS Equipment',
+    description: 'Металлообработка',
+    icon: 'DON',
+    color: 'gradient-3'
+  },
+  'DONGS Vertical .xlsx': {
+    title: 'DONGS Vertical',
+    description: 'Вертикальные центры',
+    icon: 'VRT',
+    color: 'gradient-4'
+  },
+  'US Wheeler-Catalog.pdf': {
+    title: 'US Wheeler',
+    description: 'Оборудование США',
+    icon: 'US',
+    color: 'gradient-5'
+  },
+  'Инструмент_оснастка.pdf': {
+    title: 'Инструмент',
+    description: 'Оснастка',
+    icon: 'ИНС',
+    color: 'gradient-6'
+  },
+  '2025Bright Tools金杰样册.pdf': {
+    title: 'Bright Tools',
+    description: 'Инструмент 2025',
+    icon: 'BRT',
+    color: 'gradient-7'
+  },
+  'KTA-Product-Catalouge.pdf': {
+    title: 'KTA Tools',
+    description: 'Каталог KTA',
+    icon: 'KTA',
+    color: 'gradient-8'
+  },
+  'BasiX.pdf': {
+    title: 'BasiX',
+    description: 'Продукция BasiX',
+    icon: 'BSX',
+    color: 'gradient-1'
+  },
+  'Инструмент для российского рынка.pdf': {
+    title: 'РФ Рынок',
+    description: 'Инструмент',
+    icon: 'RUS',
+    color: 'gradient-2'
+  },
+  'Новые каталоги 2025_[2025] Сверление.pdf': {
+    title: 'Сверление 2025',
+    description: 'Новый каталог',
+    icon: '2025',
+    color: 'gradient-3'
+  },
+  'Новые каталоги 2025_[2025] Фрезерование.pdf': {
+    title: 'Фрезерование 2025',
+    description: 'Новый каталог',
+    icon: '2025',
+    color: 'gradient-4'
+  },
+  'Новые каталоги 2_[2025] Inserts.pdf': {
+    title: 'Inserts 2025',
+    description: 'Пластины',
+    icon: '2025',
+    color: 'gradient-5'
+  },
+  'Новые каталоги 2_[2025]Threading.pdf': {
+    title: 'Threading 2025',
+    description: 'Резьбонарезание',
+    icon: '2025',
+    color: 'gradient-6'
+  },
+  'Отрезка и обработка канавок NEW 2025.pdf': {
+    title: 'Отрезка 2025',
+    description: 'Канавки',
+    icon: '2025',
+    color: 'gradient-7'
+  },
+  'Фрезерные корпуса NEW 2025.pdf': {
+    title: 'Корпуса 2025',
+    description: 'Фрезерование',
+    icon: '2025',
+    color: 'gradient-8'
+  }
+};
+
+function initPDFCatalogsGrid() {
+  const grid = document.getElementById('catalogsGrid');
+  if (!grid) return;
+
+  const searchInput = document.getElementById('catalogSearch');
+  const typeSelect = document.getElementById('catalogTypeFilter');
+  const statsEl = document.querySelector('.catalogs-stats');
+
+  // Получаем список всех файлов
+  let catalogFiles = Object.keys(CATALOG_CONFIG);
+  
+  function render() {
+    const searchTerm = searchInput?.value.toLowerCase() || '';
+    const filterType = typeSelect?.value || '';
+    
+    grid.innerHTML = '';
+    
+    let filtered = catalogFiles.filter(filename => {
+      const config = CATALOG_CONFIG[filename];
+      const matchesSearch = !searchTerm || 
+        config.title.toLowerCase().includes(searchTerm) ||
+        config.description.toLowerCase().includes(searchTerm) ||
+        filename.toLowerCase().includes(searchTerm);
+      
+      const fileExt = filename.toLowerCase().endsWith('.pdf') ? 'pdf' : 'xlsx';
+      const matchesType = !filterType || fileExt === filterType;
+      
+      return matchesSearch && matchesType;
+    });
+    
+    filtered.forEach(filename => {
+      const config = CATALOG_CONFIG[filename];
+      const item = createCatalogItem(filename, config);
+      grid.appendChild(item);
+    });
+    
+    if (statsEl) {
+      statsEl.textContent = `Показано: ${filtered.length} из ${catalogFiles.length}`;
+    }
+    
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="catalog-empty">Ничего не найдено</div>';
+    }
+  }
+  
+  // Начальная отрисовка
+  render();
+  
+  // Обработчики фильтрации
+  searchInput?.addEventListener('input', render);
+  typeSelect?.addEventListener('change', render);
+}
+
+function createCatalogItem(filename, config) {
+  const item = document.createElement('div');
+  item.className = 'catalog-item';
+  
+  const path = `../catalogs/${filename}`;
+  const fileExt = filename.toLowerCase().endsWith('.pdf') ? 'PDF' : 'XLSX';
+  
+  item.innerHTML = `
+    <div class="catalog-icon-wrapper ${config.color}">
+      <div class="catalog-icon">${config.icon}</div>
+    </div>
+    <div class="catalog-title">${config.title}</div>
+    <div class="catalog-actions">
+      <a href="${path}" class="catalog-action-btn download" download>
+        <span>Скачать</span>
+      </a>
+      <a href="${path}" class="catalog-action-btn" target="_blank" rel="noopener">
+        <span>Обзор</span>
+      </a>
+    </div>
+  `;
+  
+  return item;
 }
 
 // ================= Dynamic Catalogs (All files) =================
@@ -1431,15 +1612,9 @@ function initDynamicCatalogs(){
             <span class="cgf-icon" aria-hidden="true">${iconMap[f.ext] || '📁'}</span>
             <span class="cgf-name">${escapeHtml(f.title)}</span>
             <span class="cgf-size catalog-file-size">${sizeStr}</span>
-            <div class="action-card" aria-label="Действия с файлом ${escapeHtml(f.title)}" role="group">
-              <div class="action-card-seg" data-action="open" tabindex="0" role="button" aria-label="Открыть файл ${escapeHtml(f.title)}">
-                <div class="action-card-icon">🔍</div>
-                <span class="action-card-label">Открыть</span>
-              </div>
-              <div class="action-card-seg" data-action="download" tabindex="0" role="button" aria-label="Скачать файл ${escapeHtml(f.title)}">
-                <div class="action-card-icon">⬇️</div>
-                <span class="action-card-label">Скачать</span>
-              </div>
+            <div class="catalog-action-card card" role="group" aria-label="Действия с файлом ${escapeHtml(f.title)}">
+              <p data-action="open" role="button" tabindex="0" aria-label="Открыть файл ${escapeHtml(f.title)}"><span>Открыть</span></p>
+              <p data-action="download" role="button" tabindex="0" aria-label="Скачать файл ${escapeHtml(f.title)}"><span>Скачать</span></p>
             </div>
           </div>`;}).join('')}
       </div>`;
@@ -1489,18 +1664,13 @@ function initDynamicCatalogs(){
     const row = e.target.closest('.catalog-group-file');
     if(!row) return;
     const path = row.getAttribute('data-path');
-    const seg = e.target.closest('.action-card-seg');
+    const seg = e.target.closest('.catalog-action-card.card p[data-action]');
     if(seg){
       const act = seg.getAttribute('data-action');
-      if(act === 'download') {
-        triggerDownload(path);
-      } else if(act === 'open') {
-        window.open(path, '_blank', 'noopener');
-      }
+      if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
       e.stopPropagation();
       return;
     }
-    // Клик по строке вне action-card = открыть
     window.open(path, '_blank', 'noopener');
   });
 
@@ -1508,31 +1678,21 @@ function initDynamicCatalogs(){
     const row = e.target.closest('.catalog-group-file');
     if(!row) return;
     const path = row.getAttribute('data-path');
-    const seg = e.target.closest('.action-card-seg');
-    if(seg){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        const act = seg.getAttribute('data-action');
-        // Ctrl меняет действие на противоположное
-        if(e.ctrlKey){
-          if(act === 'open') {
-            triggerDownload(path);
-          } else if(act === 'download') {
-            window.open(path, '_blank', 'noopener');
-          }
-        } else {
-          if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
-        }
-      }
-      return; // не обрабатывать дальше
-    }
-    if(e.key === 'Enter' || e.key === ' '){
+    const seg = e.target.closest('.catalog-action-card.card p[data-action]');
+    if(seg && (e.key === 'Enter' || e.key === ' ')){
       e.preventDefault();
+      const act = seg.getAttribute('data-action');
       if(e.ctrlKey){
-        triggerDownload(path);
+        // Ctrl = обратное действие
+        if(act === 'open') triggerDownload(path); else window.open(path, '_blank', 'noopener');
       } else {
-        window.open(path, '_blank', 'noopener');
+        if(act === 'download') triggerDownload(path); else window.open(path, '_blank', 'noopener');
       }
+      return;
+    }
+    if(!seg && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      if(e.ctrlKey) triggerDownload(path); else window.open(path, '_blank', 'noopener');
     }
   });
 
