@@ -99,7 +99,7 @@
         <section class="all-catalogs">
             <div class="container">
                 <h2>📚 Все доступные каталоги</h2>
-                <p>Собрание файлов из папки <code>/catalogs</code>. Автоматически формируется. Можно фильтровать и скачивать.</p>
+                <p>Собрание файлов из папки <code>/catalogs</code>. Можно фильтровать и скачивать.</p>
                 <div class="catalogs-toolbar">
                     <input type="search" id="catalogSearch" placeholder="Поиск по названию..." aria-label="Поиск по каталогам" />
                     <select id="catalogTypeFilter" aria-label="Фильтр по типу">
@@ -109,7 +109,7 @@
                     </select>
                     <div class="catalogs-stats" aria-live="polite"></div>
                 </div>
-                <div class="all-catalogs-grid catalogs-strip" id="allCatalogsGrid" role="list" aria-label="Каталоги"></div>
+                <div id="catalogsGrid" class="catalogs-new-grid" role="list" aria-label="Каталоги"></div>
             </div>
         </section>
         
@@ -198,12 +198,6 @@
                 
                 <div class="catalog-grid" id="catalog-grid">
                     <!-- Enhanced product cards will be generated here -->
-                </div>
-                
-                <div class="catalog-pagination">
-                    <button class="btn-secondary" disabled>Предыдущая</button>
-                    <span class="pagination-info">Страница 1 из 1</span>
-                    <button class="btn-secondary" disabled>Следующая</button>
                 </div>
             </div>
         </section>
