@@ -65,8 +65,20 @@ function setTheme(theme) {
   localStorage.setItem('theme', theme);
   // Меняем иконку кнопки (если она есть на странице)
   if (themeToggle) {
-    themeToggle.innerHTML = theme === 'dark' ? '🌙' : '☀️';
+    themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на тёмную тему');
   }
+  // Обновляем мета-тег theme-color для браузеров
+  updateThemeColor(theme);
+}
+
+function updateThemeColor(theme) {
+  let metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (!metaTheme) {
+    metaTheme = document.createElement('meta');
+    metaTheme.name = 'theme-color';
+    document.head.appendChild(metaTheme);
+  }
+  metaTheme.content = theme === 'dark' ? '#0f141a' : '#ffffff';
 }
 
 // Инициализация темы при загрузке
@@ -75,8 +87,8 @@ function setTheme(theme) {
   if (savedTheme) {
     setTheme(savedTheme);
   } else {
-    // По умолчанию теперь тёмная тема
-    setTheme('dark');
+    // По умолчанию светлая тема (была тёмная)
+    setTheme('light');
   }
 })();
 
@@ -1154,13 +1166,33 @@ function initQuickRequestForm() {
       e.preventDefault();
       
       const formData = new FormData(form);
+      const phoneInput = form.querySelector('input[name="phone"]');
+      const phone = formData.get('phone');
+      
+      // Валидация номера телефона
+      if (phone && !validatePhone(phone)) {
+        if (phoneInput) {
+          phoneInput.classList.add('invalid');
+          phoneInput.setAttribute('aria-invalid', 'true');
+          phoneInput.focus();
+        }
+        showToast('Пожалуйста, укажите корректный номер телефона в формате +7 (999) 999-99-99', 'error');
+        return;
+      }
+      
+      // Убираем класс invalid если валидация прошла
+      if (phoneInput) {
+        phoneInput.classList.remove('invalid');
+        phoneInput.removeAttribute('aria-invalid');
+      }
+      
       const cart = getCart();
       
       // Собираем данные для отправки
       const requestData = {
         company: formData.get('company'),
         contact: formData.get('contact'),
-        phone: formData.get('phone'),
+        phone: phone,
         email: formData.get('email'),
         comment: formData.get('comment'),
         items: cart,
@@ -1172,6 +1204,14 @@ function initQuickRequestForm() {
       sendQuickRequest(requestData);
     });
   }
+}
+
+// Функция валидации телефона
+function validatePhone(phone) {
+  if (!phone) return true; // Поле может быть необязательным
+  // Поддерживает форматы: +7 (999) 999-99-99, 8 999 999 99 99, 79999999999
+  const re = /^(?:\+7|7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+  return re.test(phone.trim());
 }
 
 function sendQuickRequest(data) {
